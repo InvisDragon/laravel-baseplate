@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace InvisibleDragon\LaravelBaseplate\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelBaseplateCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-baseplate';
 
     public $description = 'My command';
 

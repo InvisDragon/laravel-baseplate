@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace InvisibleDragon\LaravelBaseplate;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
+use InvisibleDragon\LaravelBaseplate\Commands\LaravelBaseplateCommand;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class LaravelBaseplateServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -16,10 +16,10 @@ class SkeletonServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('skeleton')
+            ->name('laravel-baseplate')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_migration_table_name_table')
-            ->hasCommand(SkeletonCommand::class);
+            ->hasMigration('create_laravel_baseplate_table')
+            ->hasCommand(LaravelBaseplateCommand::class);
     }
 }
