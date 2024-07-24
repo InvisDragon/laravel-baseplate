@@ -27,5 +27,4 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
     {
         // Create views
     }
-
 }
