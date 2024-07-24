@@ -22,4 +22,10 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
             ->hasMigration('create_laravel_baseplate_table')
             ->hasCommand(LaravelBaseplateCommand::class);
     }
+
+    public function packageRegistered()
+    {
+        // Create views
+    }
+
 }
