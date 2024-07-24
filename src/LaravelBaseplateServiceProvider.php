@@ -2,9 +2,9 @@
 
 namespace InvisibleDragon\LaravelBaseplate;
 
+use InvisibleDragon\LaravelBaseplate\Commands\LaravelBaseplateCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use InvisibleDragon\LaravelBaseplate\Commands\LaravelBaseplateCommand;
 
 class LaravelBaseplateServiceProvider extends PackageServiceProvider
 {

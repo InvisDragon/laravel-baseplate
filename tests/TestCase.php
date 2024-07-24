@@ -3,8 +3,8 @@
 namespace InvisibleDragon\LaravelBaseplate\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use InvisibleDragon\LaravelBaseplate\LaravelBaseplateServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
