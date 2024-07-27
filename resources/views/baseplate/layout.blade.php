@@ -19,6 +19,11 @@
                     <span class="small">{{ __('Log in to') }}</span>
                     {{ config('app.name') }}
                 </h1>
+                @auth
+                    <p>
+                        {{ __('You are already logged in. You can choose to log in as a different') }}
+                    </p>
+                @endauth
                 <x-baseplate::validation-errors class="mb-4" :errors="$errors" />
                 <form method="post">
                     @csrf

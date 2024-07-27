@@ -18,8 +18,10 @@ class LoginController {
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
 
+                $request->session()->put('auth.password_confirmed_at', time());
+
                 // TODO: Allow configuration of intended url!
-                return redirect()->intended('dashboard');
+                return redirect()->intended('/dashboard');
             }
 
             return back()->withErrors([

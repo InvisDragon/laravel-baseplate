@@ -34,15 +34,15 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
         $middleware = ['web'];
 
         // If this class exists, good chance we are a multi-tenant application
-        if(class_exists('Stancl\Tenancy\Middleware\InitializeTenancyByDomain')) {
+        if(class_exists('\Stancl\Tenancy\Middleware\InitializeTenancyByDomain')) {
             $middleware[] = InitializeTenancyByDomain::class;
             $middleware[] = PreventAccessFromCentralDomains::class;
         }
 
-        Route::middleware($middleware)->group(function () {
+        Route::prefix('/b/')->middleware($middleware)->group(function () {
 
-            Route::get( '/b/login', [ LoginController::class, 'login' ] )->name('baseplate.login');
-            Route::post( '/b/login', [ LoginController::class, 'login' ] )->name('baseplate.login');
+            Route::get( '/login', [ LoginController::class, 'login' ] )->name('login');
+            Route::post( '/login', [ LoginController::class, 'login' ] )->name('login');
 
         });
 
