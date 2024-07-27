@@ -4,37 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
 
-    <title></title>
+    <title>{{ config('app.name') }}</title>
 
-    <link rel="stylesheet" href="" />
+    <link rel="stylesheet" href="/vendor/baseplate/css/baseplate.css" />
 
-    <link rel="shortcut icon" href="icon.png" />
-    <link rel="apple-touch-icon-precomposed" href="icon.png" />
-    <meta name="apple-mobile-web-app-title" content="" />
+    <meta name="apple-mobile-web-app-title" content="{{ config('app.name') }}" />
 </head>
 <body>
 
     <div class="bg-row">
         <div class="login-panel">
             <div class="login-content-panel">
-                <h1>Login to X</h1>
                 <h1 class="text-center">
-                    <span class="small">Login to</span> X
+                    <span class="small">{{ __('Log in to') }}</span>
+                    {{ config('app.name') }}
                 </h1>
+                <x-baseplate::validation-errors class="mb-4" :errors="$errors" />
                 <form method="post">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" />
+                    @csrf
+                    <label for="email">{{ __('Email Address') }}</label>
+                    <input type="text" name="email" />
 
-                    <label for="password">Password</label>
+                    <label for="password">{{ __('Password') }}</label>
                     <input type="password" name="password" />
 
-                    <button class="primary">Login</button>
+                    <button class="primary">{{ __('Login') }}</button>
                 </form>
             </div>
         </div>
         <div class="bg-panel">
             <div class="bg-content-panel">
-                tbc
+                <!-- TOOD: Have some exciting things here -->
             </div>
         </div>
     </div>
