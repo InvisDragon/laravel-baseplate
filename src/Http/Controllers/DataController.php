@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use InvisibleDragon\LaravelBaseplate\Data\DataPropertyJSON;
 use ReflectionClass;
-use ReflectionProperty;
-use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\DataContainer;
 
 /**
@@ -25,6 +23,14 @@ abstract class DataController {
     public abstract function getDataClass();
 
     /**
+     * Return the class name of the Model subclass you wish to use
+     *
+     * @template T
+     * @return class-string<T>
+     */
+    public abstract function getModelClass();
+
+    /**
      * Return the query of which you wish to base this controller around. This
      * should include restrictions such as what the current request context/user is
      * allowed to see
@@ -35,11 +41,37 @@ abstract class DataController {
      * Return a list of the items
      */
     public function index( Request $request ) {
-        return $this->getDataClass()::collect( $this->getQuery($request) );
+        return $this->getDataClass()::collect( $this->getQuery($request)->cursorPaginate() );
     }
 
     /**
-     * Describe this resource
+     * Prepare to store an item
+     */
+    public function store( Request $request ) {
+        $input = $request->input();
+        $input['id'] = 0; // Gets around validation issue
+        $obj = $this->getDataClass()::validateAndCreate( $input );
+        $model = new ($this->getModelClass())( $obj->except('id')->toArray() );
+        $model->save();
+        return $this->getDataClass()::from($model);
+    }
+
+    /**
+     * Return a single instance of the query (assumes id is primary key)
+     */
+    public function show( Request $request, string $id ) {
+        $query = $this->getQuery($request)->where('id', $id);
+        $obj = $query->first();
+        if($obj) {
+            return $this->getDataClass()::from( $obj );
+        } else {
+            abort(404);
+        }
+    }
+
+    /**
+     * Describe this resource with a JSON representation which can be used to
+     * make basic CRUD forms on the frontend
      */
     public function describe() {
         $cls =  $this->getDataClass();

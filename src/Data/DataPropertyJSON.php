@@ -26,7 +26,7 @@ class DataPropertyJSON {
         }
 
         return [
-            'name' => $this->property->name,
+            'name' => ucwords( $this->property->name ),
             'type' => $this->property->type->type->name,
             'description' => $description,
             'inputType' => $inputType,
