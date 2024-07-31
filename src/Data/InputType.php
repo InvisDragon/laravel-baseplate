@@ -5,8 +5,7 @@ namespace InvisibleDragon\LaravelBaseplate\Data;
 use Attribute;
 
 #[Attribute]
-class InputType {
-
+class InputType
+{
     public function __construct(public string $inputType) {}
-
 }

@@ -5,11 +5,12 @@ namespace InvisibleDragon\LaravelBaseplate\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController {
+class LoginController
+{
+    public function login(Request $request)
+    {
 
-    public function login(Request $request) {
-
-        if($request->post()) {
+        if ($request->post()) {
             $credentials = $request->validate([
                 'email' => ['required', 'email'],
                 'password' => ['required'],
@@ -32,5 +33,4 @@ class LoginController {
         return view('baseplate::baseplate.layout');
 
     }
-
 }

@@ -5,8 +5,7 @@ namespace InvisibleDragon\LaravelBaseplate\Data;
 use Attribute;
 
 #[Attribute]
-class AttributeDescription {
-
+class AttributeDescription
+{
     public function __construct(public string $description) {}
-
 }
