@@ -48,6 +48,16 @@ abstract class DataController
     }
 
     /**
+     * Save model with arguments
+     *
+     * @param $args array Finalized arguments to save for model
+     * @return mixed Model with saved arguments
+     */
+    public function createModel($args) {
+        return new ($this->getModelClass())($args);
+    }
+
+    /**
      * Prepare to store an item
      */
     public function store(Request $request)
@@ -55,7 +65,10 @@ abstract class DataController
         $input = $request->input();
         $input['id'] = 0; // Gets around validation issue
         $obj = $this->getDataClass()::validateAndCreate($input);
-        $model = new ($this->getModelClass())($obj->except('id')->toArray());
+        $model = $this->createModel(array_merge(
+            $obj->except('id')->toArray(),
+            $request->route()->parameters() // Automatically include items like company_id
+        ));
         $model->save();
 
         return $this->getDataClass()::from($model);
@@ -64,8 +77,10 @@ abstract class DataController
     /**
      * Return a single instance of the query (assumes id is primary key)
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request)
     {
+        $params = array_values( $request->route()->parameters() );
+        $id = array_pop( $params );
         $query = $this->getQuery($request)->where('id', $id);
         $obj = $query->first();
         if ($obj) {
