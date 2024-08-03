@@ -21,6 +21,7 @@ class DataPropertyJSON
         $description = null;
         $inputType = 'text';
         $args = [];
+        $default = '';
 
         $type = $this->property->type->type->name;
         if(array_key_exists($type, static::DEFAULT_TYPES_INPUT_TYPES)) {
@@ -49,6 +50,8 @@ class DataPropertyJSON
                 } else {
                     $args['apiMethod'] = $attribute->api_method;
                 }
+            } elseif( $attribute instanceof DefaultValue ) {
+                $default = call_user_func( $attribute->default );
             }
         }
 
@@ -58,6 +61,7 @@ class DataPropertyJSON
             'description' => $description,
             'inputType' => $inputType,
             'readOnly' => $this->property->isReadonly,
+            'default' => $default,
             ...$args
         ];
 
