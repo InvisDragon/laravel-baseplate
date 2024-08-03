@@ -5,6 +5,7 @@ namespace InvisibleDragon\LaravelBaseplate\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use InvisibleDragon\LaravelBaseplate\Data\DataDescriber;
 use InvisibleDragon\LaravelBaseplate\Data\DataPropertyJSON;
 use ReflectionClass;
 use Spatie\LaravelData\Support\DataContainer;
@@ -22,6 +23,16 @@ abstract class DataController
      * @return class-string<T>
      */
     abstract public function getDataClass();
+
+    /**
+     * Return the data class used to view this specific object if you wish to override this
+     *
+     * @param $obj object Model object
+     * @return class-string<T>
+     */
+    public function getSingleDataClass($obj) {
+        return $this->getDataClass()::from($obj);
+    }
 
     /**
      * Return the class name of the Model subclass you wish to use
@@ -84,7 +95,7 @@ abstract class DataController
         $query = $this->getQuery($request)->where('id', $id);
         $obj = $query->first();
         if ($obj) {
-            return $this->getDataClass()::from($obj);
+            return $this->getSingleDataClass($obj);
         } else {
             abort(404);
         }
@@ -97,18 +108,8 @@ abstract class DataController
     public function describe()
     {
         $cls = $this->getDataClass();
-        // TODO: figure out how to use the cache if available
-        $dataClass = DataContainer::get()->dataClassFactory()->build(new ReflectionClass($cls));
 
-        // Now we transform dataClass into a nice JSON object
-        return new JsonResponse(collect($dataClass->properties)
-            ->filter(function ($input) {
-                // Don't want to include ID in this as we don't want forms with ID at the top
-                return $input->name != 'id';
-            })
-            ->map(function ($input) {
-                return (new DataPropertyJSON($input))->toArray();
-            })->toArray());
+        return new JsonResponse(DataDescriber::describe($cls));
     }
 
     public static function resourceRoutes(string $prefix)

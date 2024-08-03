@@ -12,6 +12,7 @@ class DataPropertyJSON
     public const DEFAULT_TYPES_INPUT_TYPES = [
         'DateTime' => 'datetime-local',
         'int' => 'number',
+        'array' => 'repeater',
     ];
 
     public function toArray()
@@ -24,6 +25,16 @@ class DataPropertyJSON
         $type = $this->property->type->type->name;
         if(array_key_exists($type, static::DEFAULT_TYPES_INPUT_TYPES)) {
             $inputType = static::DEFAULT_TYPES_INPUT_TYPES[ $type ];
+        }
+
+        if($type == 'array') {
+            $innerClass = $this->property->type->dataClass;
+            if($innerClass) {
+                $args['items'] = [
+                    'type' => 'object',
+                    'fields' => DataDescriber::describe($innerClass),
+                ];
+            }
         }
 
         foreach ($this->property->attributes as $attribute) {
