@@ -36,6 +36,16 @@ class DataPropertyJSON
                     'fields' => DataDescriber::describe($innerClass),
                 ];
             }
+        } elseif(enum_exists($type)) {
+            // Handle enums
+            $inputType = 'enum';
+            $args['enum'] = collect($type::cases())->map(function($val) {
+                return [
+                    'key' => $val->name,
+                    'value' => $val->value
+                ];
+            });
+            $type = 'string';
         }
 
         foreach ($this->property->attributes as $attribute) {
@@ -43,6 +53,13 @@ class DataPropertyJSON
                 $description = $attribute->description;
             } elseif ($attribute instanceof InputType) {
                 $inputType = $attribute->inputType;
+                if(is_callable($inputType)) {
+                    $inputType = call_user_func($inputType);
+                    if(is_array($inputType)) { // Allow for array return to include additional arguments
+                        $args = array_merge($args, $inputType);
+                        $inputType = $inputType['inputType'];
+                    }
+                }
             } elseif( $attribute instanceof ExistsModel) {
                 $inputType = 'foreign_id';
                 if(is_callable($attribute->api_method)) {
