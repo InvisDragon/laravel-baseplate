@@ -85,15 +85,21 @@ abstract class DataController
         return $this->getDataClass()::from($model);
     }
 
-    /**
-     * Return a single instance of the query (assumes id is primary key)
-     */
-    public function show(Request $request)
+    public function getSingleObject(Request $request)
     {
         $params = array_values( $request->route()->parameters() );
         $id = array_pop( $params );
         $query = $this->getQuery($request)->where('id', $id);
         $obj = $query->first();
+        return $obj;
+    }
+
+    /**
+     * Return a single instance of the query (assumes id is primary key)
+     */
+    public function show(Request $request)
+    {
+        $obj = $this->getSingleObject($request);
         if ($obj) {
             return $this->getSingleDataClass($obj);
         } else {
@@ -110,6 +116,21 @@ abstract class DataController
         $cls = $this->getDataClass();
 
         return new JsonResponse(DataDescriber::describe($cls));
+    }
+
+    public function update(Request $request)
+    {
+        $obj = $this->getSingleObject($request);
+        if ($obj) {
+            $input = $request->input();
+            $input['id'] = 0; // Gets around validation issue
+            $newParams = $this->getDataClass()::validateAndCreate($input)->toArray();
+            $obj->fill($newParams);
+            $obj->save();
+            return $this->getSingleDataClass($obj);
+        } else {
+            abort(404);
+        }
     }
 
     public static function resourceRoutes(string $prefix)
