@@ -3,6 +3,7 @@
 namespace InvisibleDragon\LaravelBaseplate\Data;
 
 use Spatie\LaravelData\Attributes\Validation\Exists;
+use Spatie\LaravelData\Attributes\Validation\Image;
 use Spatie\LaravelData\Support\DataProperty;
 
 class DataPropertyJSON
@@ -69,6 +70,9 @@ class DataPropertyJSON
                 }
             } elseif( $attribute instanceof DefaultValue ) {
                 $default = call_user_func( $attribute->default );
+            } elseif( $attribute instanceof Image ) {
+                $inputType = 'image';
+                $type = 'file';
             }
         }
 
