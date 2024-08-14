@@ -82,7 +82,7 @@ abstract class DataController
         ));
         $model->save();
 
-        return $this->getDataClass()::from($model);
+        return $this->getSingleDataClass($model);
     }
 
     public function getSingleObject(Request $request)
