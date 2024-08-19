@@ -6,9 +6,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use InvisibleDragon\LaravelBaseplate\Data\DataDescriber;
-use InvisibleDragon\LaravelBaseplate\Data\DataPropertyJSON;
-use ReflectionClass;
-use Spatie\LaravelData\Support\DataContainer;
 
 /**
  * Base class that interacts with Spatie's Data classes to provide a basis for CRUD operations
@@ -102,6 +99,23 @@ abstract class DataController
         $obj = $this->getSingleObject($request);
         if ($obj) {
             return $this->getSingleDataClass($obj);
+        } else {
+            abort(404);
+        }
+    }
+
+    /**
+     * Deletes an object by it's id
+     */
+    public function destroy(Request $request)
+    {
+        $obj = $this->getSingleObject($request);
+        if ($obj) {
+            if($obj->delete()) {
+                return new JsonResponse(['status' => 'deleted']);
+            } else {
+                abort(503);
+            }
         } else {
             abort(404);
         }
