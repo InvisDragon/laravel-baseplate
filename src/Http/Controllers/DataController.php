@@ -55,7 +55,7 @@ abstract class DataController
      */
     public function index(Request $request)
     {
-        return $this->getDataClass()::collect($this->getQuery($request)->cursorPaginate());
+        return $this->getDataClass()::collect($this->getQuery($request)->paginate());
     }
 
     /**
