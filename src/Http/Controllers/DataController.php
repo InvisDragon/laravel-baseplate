@@ -24,10 +24,11 @@ abstract class DataController
     /**
      * Return the data class used to view this specific object if you wish to override this
      *
-     * @param $obj object Model object
+     * @param  $obj  object Model object
      * @return class-string<T>
      */
-    public function getSingleDataClass($obj) {
+    public function getSingleDataClass($obj)
+    {
         return $this->getDataClass()::from($obj);
     }
 
@@ -58,10 +59,11 @@ abstract class DataController
     /**
      * Save model with arguments
      *
-     * @param $args array Finalized arguments to save for model
+     * @param  $args  array Finalized arguments to save for model
      * @return mixed Model with saved arguments
      */
-    public function createModel($args) {
+    public function createModel($args)
+    {
         return new ($this->getModelClass())($args);
     }
 
@@ -84,10 +86,11 @@ abstract class DataController
 
     public function getSingleObject(Request $request)
     {
-        $params = array_values( $request->route()->parameters() );
-        $id = array_pop( $params );
+        $params = array_values($request->route()->parameters());
+        $id = array_pop($params);
         $query = $this->getQuery($request)->where('id', $id);
         $obj = $query->first();
+
         return $obj;
     }
 
@@ -111,7 +114,7 @@ abstract class DataController
     {
         $obj = $this->getSingleObject($request);
         if ($obj) {
-            if($obj->delete()) {
+            if ($obj->delete()) {
                 return new JsonResponse(['status' => 'deleted']);
             } else {
                 abort(503);
@@ -141,6 +144,7 @@ abstract class DataController
             $newParams = $this->getDataClass()::validateAndCreate($input)->toArray();
             $obj->fill($newParams);
             $obj->save();
+
             return $this->getSingleDataClass($obj);
         } else {
             abort(404);

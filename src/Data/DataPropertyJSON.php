@@ -2,7 +2,6 @@
 
 namespace InvisibleDragon\LaravelBaseplate\Data;
 
-use Spatie\LaravelData\Attributes\Validation\Exists;
 use Spatie\LaravelData\Attributes\Validation\Image;
 use Spatie\LaravelData\Support\DataProperty;
 
@@ -25,25 +24,25 @@ class DataPropertyJSON
         $default = '';
 
         $type = $this->property->type->type->name;
-        if(array_key_exists($type, static::DEFAULT_TYPES_INPUT_TYPES)) {
-            $inputType = static::DEFAULT_TYPES_INPUT_TYPES[ $type ];
+        if (array_key_exists($type, static::DEFAULT_TYPES_INPUT_TYPES)) {
+            $inputType = static::DEFAULT_TYPES_INPUT_TYPES[$type];
         }
 
-        if($type == 'array') {
+        if ($type == 'array') {
             $innerClass = $this->property->type->dataClass;
-            if($innerClass) {
+            if ($innerClass) {
                 $args['items'] = [
                     'type' => 'object',
                     'fields' => DataDescriber::describe($innerClass),
                 ];
             }
-        } elseif(enum_exists($type)) {
+        } elseif (enum_exists($type)) {
             // Handle enums
             $inputType = 'enum';
-            $args['enum'] = collect($type::cases())->map(function($val) {
+            $args['enum'] = collect($type::cases())->map(function ($val) {
                 return [
                     'key' => $val->name,
-                    'value' => $val->value
+                    'value' => $val->value,
                 ];
             });
             $type = 'string';
@@ -54,23 +53,23 @@ class DataPropertyJSON
                 $description = $attribute->description;
             } elseif ($attribute instanceof InputType) {
                 $inputType = $attribute->inputType;
-                if(is_callable($inputType)) {
+                if (is_callable($inputType)) {
                     $inputType = call_user_func($inputType);
-                    if(is_array($inputType)) { // Allow for array return to include additional arguments
+                    if (is_array($inputType)) { // Allow for array return to include additional arguments
                         $args = array_merge($args, $inputType);
                         $inputType = $inputType['inputType'];
                     }
                 }
-            } elseif( $attribute instanceof ExistsModel) {
+            } elseif ($attribute instanceof ExistsModel) {
                 $inputType = 'foreign_id';
-                if(is_callable($attribute->api_method)) {
+                if (is_callable($attribute->api_method)) {
                     $args['apiMethod'] = call_user_func($attribute->api_method);
                 } else {
                     $args['apiMethod'] = $attribute->api_method;
                 }
-            } elseif( $attribute instanceof DefaultValue ) {
-                $default = call_user_func( $attribute->default );
-            } elseif( $attribute instanceof Image ) {
+            } elseif ($attribute instanceof DefaultValue) {
+                $default = call_user_func($attribute->default);
+            } elseif ($attribute instanceof Image) {
                 $inputType = 'image';
                 $type = 'file';
             }
@@ -83,7 +82,7 @@ class DataPropertyJSON
             'inputType' => $inputType,
             'readOnly' => $this->property->isReadonly,
             'default' => $default,
-            ...$args
+            ...$args,
         ];
 
     }

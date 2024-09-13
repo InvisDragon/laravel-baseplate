@@ -8,10 +8,7 @@ use Attribute;
 class DefaultValue
 {
     /**
-     * @param callable $default
+     * @param  callable  $default
      */
-    public function __construct(public $default)
-    {
-
-    }
+    public function __construct(public $default) {}
 }

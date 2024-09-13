@@ -8,7 +8,7 @@ use Attribute;
 class InputType
 {
     /**
-     * @param string|callable $inputType
+     * @param  string|callable  $inputType
      */
     public function __construct(public $inputType) {}
 }

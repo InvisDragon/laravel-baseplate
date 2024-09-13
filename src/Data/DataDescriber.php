@@ -4,9 +4,10 @@ namespace InvisibleDragon\LaravelBaseplate\Data;
 
 use Spatie\LaravelData\Support\DataContainer;
 
-class DataDescriber {
-
-    public static function describe($cls) {
+class DataDescriber
+{
+    public static function describe($cls)
+    {
         // TODO: figure out how to use the cache if available
         $dataClass = DataContainer::get()->dataClassFactory()->build(new \ReflectionClass($cls));
 
@@ -20,6 +21,4 @@ class DataDescriber {
                 return (new DataPropertyJSON($input))->toArray();
             })->toArray();
     }
-
 }
-
