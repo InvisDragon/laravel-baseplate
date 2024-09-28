@@ -151,5 +151,30 @@ abstract class DataController
     {
         Route::get($prefix.'/describe', [static::class, 'describe']);
         Route::resource($prefix, static::class);
+        static::resourceRootTraits($prefix);
     }
+
+    /**
+     * Code pattern from Laravel @
+     * https://github.com/laravel/framework/blob/7aabb896018f462bab291c50295ce613c8d840f3/src/Illuminate/Database/Eloquent/Model.php#L308
+     * @param string $prefix
+     * @return void
+     */
+    protected static function resourceRootTraits(string $prefix)
+    {
+        $class = static::class;
+        $booted = [];
+
+        foreach (class_uses_recursive($class) as $trait) {
+            $method = 'routes'.class_basename($trait);
+
+            if (method_exists($class, $method) && ! in_array($method, $booted)) {
+                forward_static_call([$class, $method], $prefix);
+
+                $booted[] = $method;
+            }
+
+        }
+    }
+
 }
