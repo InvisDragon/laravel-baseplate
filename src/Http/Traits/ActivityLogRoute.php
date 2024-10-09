@@ -18,7 +18,7 @@ trait ActivityLogRoute
     {
 
         $obj = $this->getSingleObject($request);
-        $query = Activity::forSubject($obj);
+        $query = Activity::forSubject($obj)->orderBy('created_at', 'DESC');
 
         return $query->paginate();
 

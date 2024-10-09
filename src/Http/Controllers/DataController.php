@@ -31,6 +31,10 @@ abstract class DataController
         return $this->getDataClass()::from($obj);
     }
 
+    public function getEditDataClass() {
+        return $this->getDataClass();
+    }
+
     /**
      * Return the class name of the Model subclass you wish to use
      *
@@ -72,7 +76,7 @@ abstract class DataController
     {
         $input = $request->input();
         $input['id'] = 0; // Gets around validation issue
-        $obj = $this->getDataClass()::validateAndCreate($input);
+        $obj = $this->getEditDataClass()::validateAndCreate($input);
         $model = $this->createModel(array_merge(
             $obj->except('id')->toArray(),
             $request->route()->parameters() // Automatically include items like company_id
@@ -98,6 +102,9 @@ abstract class DataController
     {
         $obj = $this->getSingleObject($request);
         if ($obj) {
+            if($request->get('context') === 'edit') {
+                return ($this->getEditDataClass())::from($obj);
+            }
             return $this->getSingleDataClass($obj);
         } else {
             abort(404);
@@ -127,7 +134,7 @@ abstract class DataController
      */
     public function describe()
     {
-        $cls = $this->getDataClass();
+        $cls = $this->getEditDataClass();
 
         return new JsonResponse(DataDescriber::describe($cls));
     }
