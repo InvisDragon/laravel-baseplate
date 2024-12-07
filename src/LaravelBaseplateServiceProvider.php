@@ -5,6 +5,7 @@ namespace InvisibleDragon\LaravelBaseplate;
 use Illuminate\Support\Facades\Route;
 use InvisibleDragon\LaravelBaseplate\Commands\LaravelBaseplateCommand;
 use InvisibleDragon\LaravelBaseplate\Http\Controllers\LoginController;
+use InvisibleDragon\LaravelBaseplate\Http\Controllers\SecurityOptionsController;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -43,6 +44,15 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
 
             Route::get('/login', [LoginController::class, 'login'])->name('login');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+            Route::middleware(['auth'])->group(function() {
+                Route::get('/security-options', [SecurityOptionsController::class, 'form'])->name('security-options-form');
+                Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+                Route::get('/security-options/change-my-password', [SecurityOptionsController::class, 'change_password'])
+                    ->name('security-options-change-password');
+                Route::post('/security-options/change-my-password', [SecurityOptionsController::class, 'change_password'])
+                    ->name('security-options-change-password');
+            });
 
         });
 

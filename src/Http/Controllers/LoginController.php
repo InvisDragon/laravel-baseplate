@@ -27,7 +27,15 @@ class LoginController
             ])->onlyInput('email');
         }
 
-        return view('baseplate::baseplate.layout');
+        return view('baseplate::baseplate.login');
 
     }
+
+    public function logout() {
+
+        Auth::logout();
+        return redirect('/');
+
+    }
+
 }
