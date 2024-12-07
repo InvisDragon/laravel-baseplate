@@ -4,6 +4,7 @@ namespace InvisibleDragon\LaravelBaseplate\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use InvisibleDragon\LaravelBaseplate\Data\DataDescriber;
 
@@ -56,6 +57,7 @@ abstract class DataController
      */
     public function index(Request $request)
     {
+        Gate::authorize('listAll', $this->getModelClass());
         return $this->getDataClass()::collect($this->getQuery($request)->paginate());
     }
 
@@ -74,6 +76,7 @@ abstract class DataController
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', $this->getModelClass());
         $input = $request->input();
         $input = $this->setRequestDefaultData($input, $request, true);
         $obj = $this->getEditDataClass()::validateAndCreate($input);
@@ -102,6 +105,7 @@ abstract class DataController
     public function show(Request $request)
     {
         $obj = $this->getSingleObject($request);
+        Gate::authorize('show', $obj);
         if ($obj) {
             if($request->get('context') === 'edit') {
                 return ($this->getEditDataClass())::from($obj);
@@ -118,6 +122,7 @@ abstract class DataController
     public function destroy(Request $request)
     {
         $obj = $this->getSingleObject($request);
+        Gate::authorize('delete', $obj);
         if ($obj) {
             if($obj->delete()) {
                 return new JsonResponse(['status' => 'deleted']);
@@ -148,6 +153,7 @@ abstract class DataController
     public function update(Request $request)
     {
         $obj = $this->getSingleObject($request);
+        Gate::authorize('update', $obj);
         if ($obj) {
             $input = $request->input();
             $input = $this->setRequestDefaultData($input, $request, false);
