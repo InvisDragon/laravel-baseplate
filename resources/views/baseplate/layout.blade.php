@@ -6,9 +6,16 @@
 
     <title>{{ config('app.name') }}</title>
 
-    <link rel="stylesheet" href="/vendor/baseplate/css/baseplate.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/baseplate/css/baseplate.css') }}" />
 
     <meta name="apple-mobile-web-app-title" content="{{ config('app.name') }}" />
+
+    <style>
+        @if(config('baseplate.bg_image'))
+        .bg-panel { background-image: url('{{ config('baseplate.bg_image') }}'); }
+        @endif
+    </style>
+
 </head>
 <body>
 
@@ -16,8 +23,12 @@
         <div class="login-panel">
             <div class="login-content-panel">
                 <h1 class="text-center">
-                    <span class="small">{{ __('Log in to') }}</span>
-                    {{ config('app.name') }}
+                    <span class="small">{{ config('baseplate.login_intro') ?? __('Log in to') }}</span>
+                    @if(config('baseplate.logo_image'))
+                        <img class="login-logo" src="{{ config('baseplate.logo_image') }}" alt="{{ config('app.name') }}" title="{{ config('app.name') }}" />
+                    @else
+                        {{ config('app.name') }}
+                    @endif
                 </h1>
                 @auth
                     <p>

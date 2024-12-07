@@ -14,6 +14,7 @@ class DataPropertyJSON
         'DateTime' => 'datetime-local',
         'int' => 'number',
         'array' => 'repeater',
+        'bool' => 'bool',
     ];
 
     public function toArray()
@@ -47,6 +48,8 @@ class DataPropertyJSON
                 ];
             });
             $type = 'string';
+        } elseif($type == 'bool') {
+            $default = false;
         }
 
         foreach ($this->property->attributes as $attribute) {
