@@ -12,11 +12,19 @@
                         {{ config('app.name') }}
                     @endif
                 </h1>
+
                 @auth
                     <p>
                         {{ __('You are already logged in. You can choose to log in as a different') }}
                     </p>
                 @endauth
+
+                @if(Session::has('security-message'))
+                    <div class="success-message">
+                        {{ Session::get('security-message') }}
+                    </div>
+                @endif
+
                 <x-baseplate::validation-errors class="mb-4" :errors="$errors" />
                 <form method="post">
                     @csrf
@@ -27,6 +35,12 @@
                     <input type="password" name="password" />
 
                     <button class="primary">{{ __('Login') }}</button>
+
+                    @if(config('baseplate.allow_forgot_password'))
+                        <a href="{{ route('password.request') }}" class="forgot-password text-muted">
+                            {{ __('Forgot Password')  }}
+                        </a>
+                    @endif
                 </form>
             </div>
         </div>

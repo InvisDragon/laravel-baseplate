@@ -75,13 +75,14 @@ abstract class DataController
     public function store(Request $request)
     {
         $input = $request->input();
-        $input['id'] = 0; // Gets around validation issue
+        $input = $this->setRequestDefaultData($input, $request, true);
         $obj = $this->getEditDataClass()::validateAndCreate($input);
         $model = $this->createModel(array_merge(
             $obj->except('id')->toArray(),
             $request->route()->parameters() // Automatically include items like company_id
         ));
         $model->save();
+        $model->refresh();
 
         return $this->getSingleDataClass($model);
     }
@@ -139,12 +140,17 @@ abstract class DataController
         return new JsonResponse(DataDescriber::describe($cls));
     }
 
+    public function setRequestDefaultData( array $input, Request $request, bool $creating ) {
+        $input['id'] = 0; // Gets around validation issue
+        return $input;
+    }
+
     public function update(Request $request)
     {
         $obj = $this->getSingleObject($request);
         if ($obj) {
             $input = $request->input();
-            $input['id'] = 0; // Gets around validation issue
+            $input = $this->setRequestDefaultData($input, $request, false);
             $newParams = $this->getDataClass()::validateAndCreate($input)->toArray();
             $obj->fill($newParams);
             $obj->save();
