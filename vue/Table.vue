@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-body">
             <slot name="header"></slot>
-            <Loader :url="dataUrl" ref="loader" v-slot="{ data }">
+            <Loader :url="dataUrl" ref="loader" v-slot="{ data }" @load="onload">
                 <table class="table table-striped table-borderless card-table">
                     <thead>
                         <tr>
@@ -37,6 +37,8 @@ export default {
     components: {Pagination, Loader},
     props: [ 'url', 'columns', ],
 
+    emits: [ 'load' ],
+
     data() {
         return {
             dataUrl: this.url
@@ -46,6 +48,9 @@ export default {
     methods: {
         load() {
             this.$refs.loader.load();
+        },
+        onload($e) {
+            this.$emit('load', $e);
         },
         navigate(url) {
             this.dataUrl = url;

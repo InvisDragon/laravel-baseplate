@@ -11,7 +11,8 @@
             </div>
 
             <div class="form-item mb-3" v-for="(field, key) in describeData" :key="key">
-                <label :for="key" v-text="field.name" v-if="field.inputType !== 'bool'" />
+                <label :for="key" v-text="field.name"
+                       v-if="field.inputType !== 'bool' && field.inputType !== 'hidden'" />
 
                 <textarea
                     v-if="field.inputType === 'textarea'"
