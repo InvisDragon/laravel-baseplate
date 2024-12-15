@@ -22,10 +22,20 @@ export default {
         Multiselect
     },
     data() {
+        let defaultValue = { id: this.value, initial: true };
+        defaultValue[this.labelKey] = 'Preselected Value';
+
         return {
-            currentValue: this.value ? { title: 'Preselected Value', id: this.value } : null,
+            currentValue: this.value ? defaultValue : null,
             options: [ ],
             isLoading: false
+        }
+    },
+    mounted() {
+        if(this.currentValue && this.currentValue.initial) {
+            axios.get( this.field.apiMethod + '/' + this.currentValue.id ).then((res) => {
+                this.currentValue = res.data;
+            });
         }
     },
     methods: {
