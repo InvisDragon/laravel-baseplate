@@ -88,7 +88,7 @@ export default {
     },
     methods: {
         submitForm() {
-            if(!this.formURL) {
+            if(!this.formURL) { console.log('submit');
                 return this.$emit('submit');
             }
             this.state = 1;
@@ -111,6 +111,8 @@ export default {
                         this.error = 2;
                         this.errorDetail = error.response.data.errors;
                     }
+                } else {
+                    console.log(error);
                 }
             });
         },

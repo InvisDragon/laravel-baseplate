@@ -134,6 +134,10 @@ abstract class DataController
         }
     }
 
+    public function getDescription($cls) {
+        return DataDescriber::describe($cls);
+    }
+
     /**
      * Describe this resource with a JSON representation which can be used to
      * make basic CRUD forms on the frontend
@@ -142,7 +146,7 @@ abstract class DataController
     {
         $cls = $this->getEditDataClass();
 
-        return new JsonResponse(DataDescriber::describe($cls));
+        return new JsonResponse($this->getDescription($cls));
     }
 
     public function setRequestDefaultData( array $input, Request $request, bool $creating ) {
