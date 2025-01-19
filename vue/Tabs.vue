@@ -19,8 +19,15 @@ export default {
     props: [ 'tabs', ],
     data() {
         let cT = '';
-        if(Object.keys(this.tabs).length) {
-            cT = Object.keys(this.tabs)[0];
+        if(this.$route.query['tab']) {
+            if(this.tabs[ this.$route.query['tab'] ]) {
+                cT = this.$route.query['tab'];
+            }
+        }
+        if(this.cT === '') {
+            if (Object.keys(this.tabs).length) {
+                cT = Object.keys(this.tabs)[0];
+            }
         }
         return {
             currentTab: cT
