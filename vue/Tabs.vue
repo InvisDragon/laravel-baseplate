@@ -24,7 +24,7 @@ export default {
                 cT = this.$route.query['tab'];
             }
         }
-        if(this.cT === '') {
+        if(cT === '') {
             if (Object.keys(this.tabs).length) {
                 cT = Object.keys(this.tabs)[0];
             }
