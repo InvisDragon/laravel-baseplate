@@ -32,7 +32,9 @@ class DataPropertyJSON
 
         if($type == 'array') {
             $innerClass = $this->property->type->dataClass;
-            if($innerClass) {
+            if($this->property->type->iterableItemType === 'string') {
+                $inputType = 'string[]';
+            } elseif($innerClass) {
                 $args['items'] = [
                     'type' => 'object',
                     'fields' => DataDescriber::describe($innerClass),
