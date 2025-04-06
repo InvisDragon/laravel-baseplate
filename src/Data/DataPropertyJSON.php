@@ -4,6 +4,7 @@ namespace InvisibleDragon\LaravelBaseplate\Data;
 
 use Spatie\LaravelData\Attributes\Validation\Exists;
 use Spatie\LaravelData\Attributes\Validation\Image;
+use Spatie\LaravelData\Support\DataAttributesCollection;
 use Spatie\LaravelData\Support\DataProperty;
 
 class DataPropertyJSON
@@ -17,78 +18,87 @@ class DataPropertyJSON
         'bool' => 'bool',
     ];
 
+    protected $description, $inputType, $args, $default, $type;
+
+    public function processAttribute( DataAttributesCollection $attributes)
+    {
+        if ($attribute = $attributes->first( AttributeDescription::class ) ) {
+            $this->description = $attribute->description;
+        }
+        if ($attribute = $attributes->first( InputType::class ) ) {
+            $this->inputType = $attribute->inputType;
+            if(is_callable($this->inputType)) {
+                $this->inputType = call_user_func($this->inputType);
+                if(is_array($this->inputType)) { // Allow for array return to include additional arguments
+                    $this->args = array_merge($this->args, $this->inputType);
+                    $this->inputType = $this->inputType['inputType'];
+                }
+            }
+        }
+        if( $attribute = $attributes->first( ExistsModel::class ) ) {
+            $this->inputType = 'foreign_id';
+            if(is_callable($attribute->api_method)) {
+                $this->args['apiMethod'] = call_user_func($attribute->api_method);
+            } else {
+                $this->args['apiMethod'] = $attribute->api_method;
+            }
+        }
+        if( $attribute = $attributes->first( DefaultValue::class ) ) {
+            $this->default = call_user_func( $attribute->default );
+        }
+        if( $attribute = $attributes->first( Image::class ) ) {
+            $this->inputType = 'image';
+            $this->type = 'file';
+        }
+    }
+
     public function toArray()
     {
 
-        $description = null;
-        $inputType = 'text';
-        $args = [];
-        $default = '';
+        $this->description = null;
+        $this->inputType = 'text';
+        $this->args = [];
+        $this->default = '';
 
-        $type = $this->property->type->type->name;
-        if(array_key_exists($type, static::DEFAULT_TYPES_INPUT_TYPES)) {
-            $inputType = static::DEFAULT_TYPES_INPUT_TYPES[ $type ];
+        $this->type = $this->property->type->type->name;
+        if(array_key_exists($this->type, static::DEFAULT_TYPES_INPUT_TYPES)) {
+            $this->inputType = static::DEFAULT_TYPES_INPUT_TYPES[ $this->type ];
         }
 
-        if($type == 'array') {
+        if($this->type == 'array') {
             $innerClass = $this->property->type->dataClass;
             if($this->property->type->iterableItemType === 'string') {
-                $inputType = 'string[]';
+                $this->inputType = 'string[]';
             } elseif($innerClass) {
-                $args['items'] = [
+                $this->args['items'] = [
                     'type' => 'object',
                     'fields' => DataDescriber::describe($innerClass),
                 ];
             }
-        } elseif(enum_exists($type)) {
+        } elseif(enum_exists($this->type)) {
             // Handle enums
-            $inputType = 'enum';
-            $args['enum'] = collect($type::cases())->map(function($val) {
+            $this->inputType = 'enum';
+            $this->args['enum'] = collect($this->type::cases())->map(function($val) {
                 return [
                     'key' => $val->name,
                     'value' => $val->value
                 ];
             });
-            $type = 'string';
-        } elseif($type == 'bool') {
-            $default = false;
+            $this->type = 'string';
+        } elseif($this->type == 'bool') {
+            $this->default = false;
         }
 
-        foreach ($this->property->attributes as $attribute) {
-            if ($attribute instanceof AttributeDescription) {
-                $description = $attribute->description;
-            } elseif ($attribute instanceof InputType) {
-                $inputType = $attribute->inputType;
-                if(is_callable($inputType)) {
-                    $inputType = call_user_func($inputType);
-                    if(is_array($inputType)) { // Allow for array return to include additional arguments
-                        $args = array_merge($args, $inputType);
-                        $inputType = $inputType['inputType'];
-                    }
-                }
-            } elseif( $attribute instanceof ExistsModel) {
-                $inputType = 'foreign_id';
-                if(is_callable($attribute->api_method)) {
-                    $args['apiMethod'] = call_user_func($attribute->api_method);
-                } else {
-                    $args['apiMethod'] = $attribute->api_method;
-                }
-            } elseif( $attribute instanceof DefaultValue ) {
-                $default = call_user_func( $attribute->default );
-            } elseif( $attribute instanceof Image ) {
-                $inputType = 'image';
-                $type = 'file';
-            }
-        }
+        $this->processAttribute($this->property->attributes);
 
         return [
             'name' => ucwords(str_replace('_', ' ', $this->property->name)),
-            'type' => $type,
-            'description' => $description,
-            'inputType' => $inputType,
+            'type' => $this->type,
+            'description' => $this->description,
+            'inputType' => $this->inputType,
             'readOnly' => $this->property->isReadonly,
-            'default' => $default,
-            ...$args
+            'default' => $this->default,
+            ...$this->args
         ];
 
     }
