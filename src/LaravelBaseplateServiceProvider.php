@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use InvisibleDragon\LaravelBaseplate\Commands\LaravelBaseplateCommand;
 use InvisibleDragon\LaravelBaseplate\Http\Controllers\LoginController;
 use InvisibleDragon\LaravelBaseplate\Http\Controllers\SecurityOptionsController;
+use InvisibleDragon\LaravelBaseplate\Http\Controllers\SuperUserModeController;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -57,6 +58,12 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
                     ->name('security-options-change-password');
                 Route::post('/security-options/change-my-password', [SecurityOptionsController::class, 'change_password'])
                     ->name('security-options-change-password');
+
+                Route::get('/security-options/register-passkey', [ SecurityOptionsController::class, 'register_passkey' ])
+                    ->name('security-options-passkey');
+
+                Route::get('/super-user-auth', [ SuperUserModeController::class, 'auth' ])->name('super-user-auth');
+                Route::post('/super-user-auth', [ SuperUserModeController::class, 'auth' ])->name('super-user-auth');
             });
 
         });

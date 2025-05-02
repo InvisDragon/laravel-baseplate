@@ -29,6 +29,14 @@
                     </td>
                 </tr>
             @endif
+            <tr>
+                <th>{{ __('Using a passkey') }}</th>
+                <td>
+                    <a href="{{ route('security-options-passkey') }}">
+                        {{ __('Create Passkey') }}
+                    </a>
+                </td>
+            </tr>
         </table>
 
         <h2>{{ __('Logout') }}</h2>

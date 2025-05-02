@@ -6,7 +6,7 @@
 
     <title>{{ config('app.name') }}</title>
 
-    <link rel="stylesheet" href="{{ asset('vendor/baseplate/css/baseplate.css') }}" />
+    <link rel="stylesheet" href="/vendor/baseplate/css/baseplate.css" />
 
     <meta name="apple-mobile-web-app-title" content="{{ config('app.name') }}" />
 

@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use InvisibleDragon\LaravelBaseplate\Auth\SuperUserMode;
 
 class SecurityOptionsController
 {
@@ -50,6 +51,16 @@ class SecurityOptionsController
         }
 
         return view('baseplate::baseplate.change_password');
+
+    }
+
+    public function register_passkey(Request $request)
+    {
+
+        if(!SuperUserMode::isInSuperUserMode($request)) {
+            return SuperUserMode::requestSuperUser($request);
+        }
+
 
     }
 
