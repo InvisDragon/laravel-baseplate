@@ -8,10 +8,13 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('laravel_baseplate_table', function (Blueprint $table) {
+        Schema::create('user_auth_methods', function (Blueprint $table) {
             $table->id();
 
-            // add fields
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('type');
+            $table->text('key_id');
+            $table->text('key');
 
             $table->timestamps();
         });

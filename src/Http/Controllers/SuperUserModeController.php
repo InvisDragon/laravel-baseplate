@@ -19,6 +19,7 @@ class SuperUserModeController {
                 return $r;
             }
             SuperUserMode::setSuperMode($request);
+            // TODO: Secure this!
             return redirect($_GET['return_to']);
         }
 

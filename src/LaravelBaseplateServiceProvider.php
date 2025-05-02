@@ -26,7 +26,7 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasAssets()
-            ->hasMigration('create_laravel_baseplate_table')
+            ->hasMigration('create_user_auth_methods_table')
             ->hasCommand(LaravelBaseplateCommand::class);
     }
 
