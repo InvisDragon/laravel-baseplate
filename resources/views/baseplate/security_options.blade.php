@@ -32,7 +32,7 @@
             <tr>
                 <th>{{ __('Using a passkey') }}</th>
                 <td>
-                    <a href="{{ route('security-options-passkey') }}">
+                    <a href="{{ route('security-options-register-auth-method', 'passkey') }}">
                         {{ __('Create Passkey') }}
                     </a>
                 </td>

@@ -35,4 +35,8 @@ class AuthMethodPassword extends AuthMethod {
 
     }
 
+    public static function setup(Request $request) {
+        // todo
+    }
+
 }

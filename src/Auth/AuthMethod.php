@@ -9,6 +9,7 @@ abstract class AuthMethod {
     public static function get_methods() {
         return [
             'password' => AuthMethodPassword::class,
+            'passkey' => AuthMethodPasskey::class,
         ];
     }
 
@@ -17,5 +18,7 @@ abstract class AuthMethod {
     public abstract static function get_auth_html() : string;
 
     public abstract static function authenticate(Request $request, $user);
+
+    public abstract static function setup(Request $request);
 
 }

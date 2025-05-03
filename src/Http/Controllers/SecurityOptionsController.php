@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use InvisibleDragon\LaravelBaseplate\Auth\AuthMethod;
 use InvisibleDragon\LaravelBaseplate\Auth\SuperUserMode;
 
 class SecurityOptionsController
@@ -54,13 +55,17 @@ class SecurityOptionsController
 
     }
 
-    public function register_passkey(Request $request)
+    public function register_auth_method(Request $request, string $auth_method)
     {
 
         if(!SuperUserMode::isInSuperUserMode($request)) {
             return SuperUserMode::requestSuperUser($request);
         }
 
+        $auth_cls = AuthMethod::get_methods()[ $auth_method ];
+        if(!$auth_cls) abort(400, 'Invalid auth method');
+
+        return $auth_cls::setup($request);
 
     }
 

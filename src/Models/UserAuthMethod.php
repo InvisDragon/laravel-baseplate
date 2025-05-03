@@ -8,4 +8,6 @@ class UserAuthMethod extends Model {
 
     public $guarded = [];
 
+    public $fillable = [ 'user_id', 'type', 'key_id', 'key', ];
+
 }

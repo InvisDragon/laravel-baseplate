@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('user_auth_methods', function (Blueprint $table) {
             $table->id();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->string('type');
             $table->text('key_id');
             $table->text('key');

@@ -18,14 +18,14 @@ composer require invisibledragon/laravel-baseplate
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-baseplate-migrations"
+php artisan vendor:publish --tag="baseplate-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-baseplate-config"
+php artisan vendor:publish --tag="baseplate-config"
 ```
 
 This is the contents of the published config file:
@@ -35,18 +35,10 @@ return [
 ];
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-baseplate-views"
-```
 
 ## Usage
 
-```php
-$laravelBaseplate = new InvisibleDragon\LaravelBaseplate();
-echo $laravelBaseplate->echoPhrase('Hello, InvisibleDragon!');
-```
+TBC
 
 ## Testing
 
