@@ -18,7 +18,7 @@
         <form method="post">
             @csrf
 
-            <input type="hidden" name="auth_method" value="password" />
+            <input type="hidden" id="auth_method" name="auth_method" value="password" />
 
             @foreach(InvisibleDragon\LaravelBaseplate\Auth\AuthMethod::get_methods() as $method)
                 {!! $method::get_auth_html() !!}

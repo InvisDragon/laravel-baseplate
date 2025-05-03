@@ -29,10 +29,12 @@
                 <form method="post">
                     @csrf
                     <label for="email">{{ __('Email Address') }}</label>
-                    <input type="text" name="email" />
+                    <input type="text" name="email" autocomplete="username webauthn" />
 
-                    <label for="password">{{ __('Password') }}</label>
-                    <input type="password" name="password" />
+                    <input type="hidden" id="auth_method" name="auth_method" value="password" />
+                    @foreach(InvisibleDragon\LaravelBaseplate\Auth\AuthMethod::get_methods() as $method)
+                        {!! $method::get_auth_html() !!}
+                    @endforeach
 
                     <button class="primary">{{ __('Login') }}</button>
 

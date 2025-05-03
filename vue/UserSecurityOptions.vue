@@ -3,6 +3,7 @@
     <iframe
         class="security-options"
         ref="iframe"
+        allow="publickey-credentials-get; publickey-credentials-create"
         :style="style"
         src="/b/security-options">
     </iframe>

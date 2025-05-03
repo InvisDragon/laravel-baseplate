@@ -59,8 +59,10 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
                 Route::post('/security-options/change-my-password', [SecurityOptionsController::class, 'change_password'])
                     ->name('security-options-change-password');
 
-                Route::get('/security-options/register-auth-method/{auth_method}/', [ SecurityOptionsController::class, 'register_auth_method' ])
+                Route::get('/security-options/register-auth-method/{auth_method}', [ SecurityOptionsController::class, 'register_auth_method' ])
                     ->name('security-options-register-auth-method');
+                Route::post('/security-options/register-auth-method/{auth_method}', [ SecurityOptionsController::class, 'register_auth_method' ])
+                ->name('security-options-register-auth-method');
 
                 Route::get('/super-user-auth', [ SuperUserModeController::class, 'auth' ])->name('super-user-auth');
                 Route::post('/super-user-auth', [ SuperUserModeController::class, 'auth' ])->name('super-user-auth');

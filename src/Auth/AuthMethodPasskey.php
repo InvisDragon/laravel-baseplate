@@ -12,8 +12,7 @@ class AuthMethodPasskey extends AuthMethod {
     }
 
     public static function get_auth_html() : string {
-        // TODO
-        return view('baseplate::baseplate.auth_method.password')->render();
+        return view('baseplate::baseplate.auth_method.passkey')->render();
     }
 
     public static function authenticate(Request $request, $user) {
@@ -45,8 +44,9 @@ class AuthMethodPasskey extends AuthMethod {
             ]);
             $authMethod->save();
 
+            // TOOD: Should notify user of new passkey added!
 
-            return redirect()->to('security-options-form')->with('security-message', __('Passkey has been set successfully'));
+            return redirect()->route('security-options-form')->with('security-message', __('Passkey has been set successfully'));
 
         }
 

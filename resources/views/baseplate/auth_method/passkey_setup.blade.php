@@ -14,7 +14,7 @@
 
         </form>
 
-        <script type="text/javascript" src="/vendor/baseplate/js/passkey-setup.js?v=2"></script>
+        <script type="text/javascript" src="/vendor/baseplate/js/passkey-setup.js"></script>
 
     </div>
 @endsection

@@ -1,3 +1,6 @@
+// This very simple code displays a button to the user if Passkey is available,
+// and handles the creation as per browser provided guidance
+
 // Availability of `window.PublicKeyCredential` means WebAuthn is usable.
 // `isUserVerifyingPlatformAuthenticatorAvailable` means the feature detection is usable.
 // `isConditionalMediationAvailable` means the feature detection is usable.
@@ -23,12 +26,12 @@ if (window.PublicKeyCredential &&
             navigator.credentials.create({
                 publicKey: options
             }).then(function(credential) {
-                const _result = credential.toJSON();
-                const result = JSON.stringify(_result);
+
+                const result = JSON.stringify(credential);
                 console.log(result);
 
                 document.querySelector("#passkeyValue").value = result;
-                // document.querySelector("#passKey").submit();
+                document.querySelector("#passkey").submit();
 
             });
 
