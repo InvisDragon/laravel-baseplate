@@ -12,7 +12,16 @@ class AuthMethodPasskey extends AuthMethod {
     }
 
     public static function get_auth_html() : string {
-        return view('baseplate::baseplate.auth_method.passkey')->render();
+        $requestOptions = [
+            // Server generated challenge
+            'challenge' => base64_encode(random_bytes(32)),
+            // The same RP ID as used during registration
+            'rpId' => request()->getHost(),
+        ];
+
+        return view('baseplate::baseplate.auth_method.passkey', [
+            'requestOptions' => $requestOptions,
+        ])->render();
     }
 
     public static function authenticate(Request $request, $user) {
