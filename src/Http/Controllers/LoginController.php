@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use InvisibleDragon\LaravelBaseplate\Auth\AuthMethod;
 
 class LoginController
 {
@@ -15,20 +16,43 @@ class LoginController
     {
 
         if ($request->post()) {
-            $credentials = $request->validate([
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]);
 
-            if (Auth::guard('web')->attempt($credentials)) {
-                $request->session()->regenerate();
-                $request->session()->put('auth.password_confirmed_at', time());
-                return redirect()->intended('/');
+            $methods = AuthMethod::get_methods();
+            $method = $methods[ $request->post('auth_method') ];
+
+            $user = null;
+            if($request->post('email')) {
+                // Try to provide the user to authenticate against if we can
+                $provider = auth()->createUserProvider(config('auth.guards.web.provider'));
+                $user = $provider->retrieveByCredentials(['email' => $request->post('email')]);
+                if(!$user) {
+                    return back()->withErrors([
+                        'email' => __('The provided credentials do not match our records.'),
+                    ])->onlyInput('email');
+                }
             }
 
-            return back()->withErrors([
-                'email' => __('The provided credentials do not match our records.'),
-            ])->onlyInput('email');
+            $r = $method::authenticate( $request, $user );
+            if($r === true && $user !== null) {
+                // Authenticate $user if we just get told yes
+                Auth::login($user);
+                return redirect()->intended('/');
+            } if(is_int($r) && $r >= 0) {
+
+                // We might get returned an integer to login as
+                $provider = auth()->createUserProvider(config('auth.guards.web.provider'));
+                $user = $provider->retrieveById($r);
+                Auth::login($user);
+                return redirect()->intended('/');
+
+            } else {
+
+                return back()->withErrors([
+                    'email' => __('Account could not be authenticated'),
+                ])->onlyInput('email');
+
+            }
+
         }
 
         return view('baseplate::baseplate.login');
