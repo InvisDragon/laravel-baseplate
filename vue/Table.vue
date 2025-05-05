@@ -1,8 +1,17 @@
 <template>
 
     <div class="card">
-        <div class="card-body">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <ul class="table-filters list-unstyled mb-0 d-flex">
+                <li v-for="filter in filters">
+                    <button type="button" class="btn btn-link" @click="openFilter(filter)">
+                        {{ filter.title }}
+                    </button>
+                </li>
+            </ul>
             <slot name="header"></slot>
+        </div>
+        <div class="card-body pt-0 pb-0">
             <Loader :url="dataUrl" ref="loader" v-slot="{ data }" @load="onload">
                 <table class="table table-striped table-borderless card-table">
                     <thead>
@@ -35,7 +44,11 @@ import Pagination from "./Pagination.vue";
 export default {
     name: "Table",
     components: {Pagination, Loader},
-    props: [ 'url', 'columns', ],
+    props: {
+        url: { type: String },
+        columns: { type: Array },
+        filters: { type: Array, default: () => {  return [];  } },
+    },
 
     emits: [ 'load' ],
 
@@ -54,6 +67,15 @@ export default {
         },
         navigate(url) {
             this.dataUrl = url;
+        },
+        openFilter(filter) {
+            let orig = this.dataUrl.split('?');
+            let params = new URLSearchParams(orig[1]);
+            for(let key in filter.filters) {
+                params.set(key, filter.filters[key]);
+            }
+            this.dataUrl = orig[0] + "?" + params.toString();
+            console.log(this.dataUrl);
         }
     }
 }
