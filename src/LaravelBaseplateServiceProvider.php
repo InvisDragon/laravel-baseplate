@@ -16,6 +16,9 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
+        if(!class_exists('Webauthn\PublicKeyCredentialRequestOptions')) {
+            require_once(dirname(__FILE__) . '/../vendor/autoload.php');
+        }
         /*
          * This class is a Package Service Provider
          *

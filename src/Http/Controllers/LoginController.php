@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use InvisibleDragon\LaravelBaseplate\Auth\AuthMethod;
+use InvisibleDragon\LaravelBaseplate\Challenge\ChallengeMethod;
 
 class LoginController
 {
@@ -16,6 +17,13 @@ class LoginController
     {
 
         if ($request->post()) {
+
+            // Challenge
+            if(!ChallengeMethod::get_method()::check_token( $request->post('challenge', '') )) {
+                return back()->withErrors([
+                    'email' => __('Request could not be authenticated'),
+                ]);
+            }
 
             $methods = AuthMethod::get_methods();
             $method = $methods[ $request->post('auth_method') ];

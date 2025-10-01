@@ -14,6 +14,7 @@
         @if(config('baseplate.bg_image'))
         .bg-panel { background-image: url('{{ config('baseplate.bg_image') }}'); }
         @endif
+        {{ config('baseplate.login_css') }}
     </style>
 
 </head>

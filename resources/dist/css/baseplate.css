@@ -4,13 +4,15 @@
 
 body {
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    background: #fff;
+    background: #f3f4f6;
     --border-radius: 5px;
     --border-color: #ccc;
     --input-bg-color: #fafafa;
     --button-bg-color: #efefef;
     --button-bg-hover-color: #eaeaea;
     --success-bg-color: #d1e7dd;
+    --error-bg-color: #fef2f2;
+    --error-color: #9f0712;
 }
 
 .bg-row {
@@ -20,14 +22,19 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
+    gap: 2.5rem;
 }
 
 .login-panel,
 .bg-panel {
-    flex-grow: 1;
     display: flex;
     align-items: center;
-    width: 50%;
+}
+.login-panel {
+    min-width: calc(450px + 3rem);
+}
+.bg-panel {
+    flex-grow: 1;
 }
 
 .login-panel {
@@ -38,11 +45,18 @@ body {
     justify-content: flex-start;
 }
 
-.login-content-panel,
 .bg-content-panel {
+    width: 100%;
+}
+
+.login-content-panel {
     max-width: 450px;
     width: 100%;
-    padding: 4rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    --shadow: 0 1px 3px 0 var(--shadow-color,#0000001a),0 1px 2px -1px var(--shadow-color,#0000001a);
+    box-shadow: var(--shadow);
 }
 
 .bg-panel {
@@ -62,8 +76,9 @@ h6 {
 
 h1 .small {
     display: block;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
+    text-transform: uppercase;
 }
 
 .text-center {
@@ -124,4 +139,51 @@ button.primary:hover {
     background: var(--success-bg-color);
     padding: 0.5rem;
     margin: 0.5rem 0;
+}
+
+.bottom-link {
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    font-size: 12px;
+    display: block;
+}
+
+.alert-danger {
+    background-color: var(--error-bg-color);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--error-color);
+    border-radius: 0.25rem;
+    color: var(--error-color);
+}
+.alert-danger > :first-child {
+    margin-top: 0;
+}
+.alert-danger > :last-child {
+    margin-bottom: 0;
+}
+
+@media(max-width: 800px) {
+    .bg-row {
+        flex-direction: column-reverse;
+        gap: 0;
+        position: static;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    .login-panel {
+        justify-content: center;
+        min-width: auto;
+        padding: 0 1.5rem;
+    }
+    .bg-panel {
+        height: 45vw;
+    }
+    .login-content-panel {
+        margin-bottom: 3rem;
+        margin-top: -2.5rem;
+        z-index: 1;
+    }
 }

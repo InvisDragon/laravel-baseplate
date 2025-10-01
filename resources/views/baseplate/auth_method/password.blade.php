@@ -1,2 +1,2 @@
 <label for="password">{{ __('Password') }}</label>
-<input type="password" name="password" />
+<input type="password" id="password" name="password" />
