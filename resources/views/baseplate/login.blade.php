@@ -44,6 +44,12 @@
                             {{ __('Forgot Password')  }}
                         </a>
                     @endif
+
+                    @if(config('baseplate.login_register_link'))
+                        <a href="{{ config('baseplate.login_register_link') }}" class="bottom-link">
+                            {{ config('baseplate.login_register_link_text') }}
+                        </a>
+                    @endif
                 </form>
             </div>
         </div>

@@ -11,6 +11,11 @@ abstract class ChallengeMethod {
         ];
     }
 
+    public static function check_request($request) {
+        $method = static::get_method();
+        return $method::check_token( $request->post('challenge', '') );
+    }
+
     public static function get_method() {
         return static::get_methods()[ config('baseplate.challenge_method', 'dummy') ];
     }

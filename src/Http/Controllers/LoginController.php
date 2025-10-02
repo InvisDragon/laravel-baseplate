@@ -19,7 +19,7 @@ class LoginController
         if ($request->post()) {
 
             // Challenge
-            if(!ChallengeMethod::get_method()::check_token( $request->post('challenge', '') )) {
+            if(!ChallengeMethod::check_request($request) ) {
                 return back()->withErrors([
                     'email' => __('Request could not be authenticated'),
                 ]);

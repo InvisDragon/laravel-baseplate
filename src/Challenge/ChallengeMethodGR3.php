@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Http;
 class ChallengeMethodGR3 extends ChallengeMethod {
 
     public static function get_key() {
-        return config('baseplate.google_recpatcha_key');
+        return config('baseplate.google_recaptcha_key');
     }
 
     public static function get_secret() {
-        return config('baseplate.google_recpatcha_secret');
+        return config('baseplate.google_recaptcha_secret');
     }
 
     public static function get_threshold() {
-        return intval(config('baseplate.google_recpatcha_threshold', 0.6));
+        return intval(config('baseplate.google_recaptcha_threshold', 0.6));
     }
 
     public static function output_scripts() {
