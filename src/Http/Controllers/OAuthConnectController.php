@@ -20,16 +20,16 @@ abstract class OAuthConnectController {
         );
     }
 
-    public abstract function getAuthorizationUrl() : string;
-    public abstract function getTokenUrl() : string;
+    public abstract static function getAuthorizationUrl() : string;
+    public abstract static function getTokenUrl() : string;
     public abstract static function getServiceName() : string;
-    public abstract function storeToken($token);
+    public abstract static function storeToken($token);
 
-    public function getClientId() {
+    public static function getClientId() {
         return config('services.' . static::getServiceName() . '.key');
     }
 
-    public function getClientSecret() {
+    public static function getClientSecret() {
         return config('services.' . static::getServiceName() . '.secret');
     }
 
@@ -45,24 +45,24 @@ abstract class OAuthConnectController {
     {
 
         if($request->get('code')) {
-            $resp = Http::withBasicAuth( $this->getClientId(), $this->getClientSecret() )
-                ->post( $this->getTokenUrl(), [
+            $resp = Http::withBasicAuth( static::getClientId(), static::getClientSecret() )
+                ->post( static::getTokenUrl(), [
                     'grant_type' => 'authorization_code',
                     'code' => $request->get('code'),
                     'redirect_uri' => static::getRedirectUrl(),
                 ] );
             if($resp->successful()) {
                 $body = $resp->json();
-                $this->storeToken($body);
+                static::storeToken($body);
                 return $this->complete();
             } else {
                 throw new Exception( 'Authentication Failed' );
             }
         }
 
-        $uri = url()->query( $this->getAuthorizationUrl(), [
+        $uri = url()->query( static::getAuthorizationUrl(), [
             'redirect_uri' => static::getRedirectUrl(),
-            'client_id' => $this->getClientId(),
+            'client_id' => static::getClientId(),
             'response_type' => 'code',
         ] );
         return response()->redirectTo( $uri );
