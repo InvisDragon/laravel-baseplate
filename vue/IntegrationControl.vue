@@ -2,6 +2,10 @@
 
     <div>
 
+        <p v-if="field.hasConnected">
+            Connected. You can choose to re-connect with a different account.
+        </p>
+
         <a class="btn btn-primary"
             :href="field.connectUrl"
             target="_blank">
