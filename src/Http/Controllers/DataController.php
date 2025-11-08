@@ -110,6 +110,8 @@ abstract class DataController extends ReadOnlyDataController
         $obj = $this->getSingleObject($request);
         Gate::authorize('update', $obj);
         if ($obj) {
+            $input = $this->getDataClass()::from($obj)->toArray();
+            $input = array_merge($input, $request->input());
             $input = $request->input();
             $input = $this->setRequestDefaultData($input, $request, false);
             $newParams = $this->getDataClass()::validateAndCreate($input)->toArray();
@@ -123,8 +125,8 @@ abstract class DataController extends ReadOnlyDataController
 
     public static function resourceRoutes(string $prefix)
     {
-        parent::resourceRoutes($prefix);
         Route::get($prefix.'/describe', [static::class, 'describe']);
+        parent::resourceRoutes($prefix);
     }
 
 }
