@@ -54,6 +54,8 @@ class LaravelBaseplateServiceProvider extends PackageServiceProvider
             Route::get('/reset-password/{token}', [LoginController::class, 'reset_password'])->name('password.reset');
             Route::post('/reset-password/{token}', [LoginController::class, 'reset_password'])->name('password.reset');
 
+            Route::get('/confirm-registration/{token}', [LoginController::class, 'confirm_registration'])->name('user.confirm');
+
             Route::middleware(['auth'])->group(function() {
                 Route::get('/security-options', [SecurityOptionsController::class, 'form'])->name('security-options-form');
                 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');

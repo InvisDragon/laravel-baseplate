@@ -134,4 +134,18 @@ class LoginController
 
     }
 
+    public function confirm_registration(Request $request, string $token) {
+        Password::reset(
+            [ 'email' => $request->get('email'), 'token' => $token, 'password' => null, ],
+            function ($user, $password) {
+
+                $user->is_active = true;
+                $user->email_verified_at = new \DateTime();
+                $user->save();
+
+            }
+        );
+        return redirect()->route('login')->with('security-message', __('Your account has been confirmed'));
+    }
+
 }
