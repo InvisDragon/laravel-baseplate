@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use InvisibleDragon\LaravelBaseplate\Data\DataDescriber;
+use InvisibleDragon\LaravelBaseplate\Data\ExistingValue;
 
 /**
  * Base class that interacts with Spatie's Data classes to provide a basis for CRUD operations
@@ -110,13 +111,14 @@ abstract class DataController extends ReadOnlyDataController
         $obj = $this->getSingleObject($request);
         Gate::authorize('update', $obj);
         if ($obj) {
+            ExistingValue::$existing_value = $obj;
             $input = $this->getDataClass()::from($obj)->toArray();
             $input = array_merge($input, $request->input());
-            $input = $request->input();
             $input = $this->setRequestDefaultData($input, $request, false);
             $newParams = $this->getDataClass()::validateAndCreate($input)->toArray();
             $obj->fill($newParams);
             $obj->save();
+            ExistingValue::$existing_value = null;
             return $this->getSingleDataClass($obj);
         } else {
             abort(404);
