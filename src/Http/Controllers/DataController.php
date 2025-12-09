@@ -112,10 +112,10 @@ abstract class DataController extends ReadOnlyDataController
         Gate::authorize('update', $obj);
         if ($obj) {
             ExistingValue::$existing_value = $obj;
-            $input = $this->getDataClass()::from($obj)->toArray();
+            $input = $this->getEditDataClass()::from($obj)->toArray();
             $input = array_merge($input, $request->input());
             $input = $this->setRequestDefaultData($input, $request, false);
-            $newParams = $this->getDataClass()::validateAndCreate($input)->toArray();
+            $newParams = $this->getEditDataClass()::validateAndCreate($input)->toArray();
             $obj->fill($newParams);
             $obj->save();
             ExistingValue::$existing_value = null;
