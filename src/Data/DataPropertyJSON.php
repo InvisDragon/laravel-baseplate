@@ -18,7 +18,7 @@ class DataPropertyJSON
         'bool' => 'bool',
     ];
 
-    protected $description, $inputType, $args, $default, $type;
+    protected $description, $inputType, $args, $default, $type, $label;
 
     public function processAttribute( DataAttributesCollection $attributes)
     {
@@ -50,6 +50,13 @@ class DataPropertyJSON
             $this->inputType = 'image';
             $this->type = 'file';
         }
+        if( $attribute = $attributes->first( InputLabel::class ) ) {
+            if(is_callable($attribute->label)) {
+                $this->label = call_user_func($attribute->label);
+            } else {
+                $this->label = $attribute->label;
+            }
+        }
     }
 
     public function toArray()
@@ -59,6 +66,7 @@ class DataPropertyJSON
         $this->inputType = 'text';
         $this->args = [];
         $this->default = '';
+        $this->label = ucwords(str_replace('_', ' ', $this->property->name));
 
         $this->type = $this->property->type->type->name;
         if(array_key_exists($this->type, static::DEFAULT_TYPES_INPUT_TYPES)) {
@@ -92,7 +100,7 @@ class DataPropertyJSON
         $this->processAttribute($this->property->attributes);
 
         return [
-            'name' => ucwords(str_replace('_', ' ', $this->property->name)),
+            'name' => $this->label,
             'type' => $this->type,
             'description' => $this->description,
             'inputType' => $this->inputType,
